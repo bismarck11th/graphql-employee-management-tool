@@ -2,10 +2,10 @@ from django.db import models
 
 
 class Department(models.Model):
-    name = models.CharField(max_length=50)
+    dept_name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return self.dept_name
 
 
 class Employee(models.Model):
