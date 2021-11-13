@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 
+// Auth
 export const CREATE_USER = gql`
   mutation ($username: String!, $password: String!) {
     createUser(input: { username: $username, password: $password, email: "" }) {
@@ -15,6 +16,38 @@ export const GET_TOKEN = gql`
   mutation ($username: String!, $password: String!) {
     tokenAuth(username: $username, password: $password) {
       token
+    }
+  }
+`;
+
+// MainPage
+export const GET_EMPLOYEES = gql`
+  query {
+    allEmployees {
+      edges {
+        node {
+          id
+          name
+          joinYear
+          department {
+            id
+            deptName
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_DEPTS = gql`
+  query {
+    allDepartments {
+      edges {
+        node {
+          id
+          deptName
+        }
+      }
     }
   }
 `;

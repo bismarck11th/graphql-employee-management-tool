@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 import jwtDecode from 'jwt-decode';
 // MUI
 import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
+// Query
 import { CREATE_USER, GET_TOKEN } from '../queries';
 // CSS
 import styles from './Auth.module.css';
