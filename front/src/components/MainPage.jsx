@@ -6,6 +6,8 @@ import { Grid } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 // Query
 import { GET_EMPLOYEES, GET_DEPTS } from '../queries';
+// Components
+import { EmployeeCreate, EmployeeList } from './';
 // CSS
 import styles from './MainPage.module.css';
 
@@ -54,6 +56,14 @@ const MainPage = () => {
           }}
         />
       </h1>
+      <EmployeeCreate dataDepts={dataDepts} />
+      <Grid container>
+        <Grid item xs={5}>
+          <EmployeeList dataEmployees={dataEmployees} />
+        </Grid>
+        <Grid item xs={4}></Grid>
+        <Grid item xs={3}></Grid>
+      </Grid>
     </div>
   );
 };
