@@ -63,10 +63,12 @@ const EmployeeCreate = ({ dataDepts }) => {
             ? async () => {
                 try {
                   updateEmployee({
-                    id: editedId,
-                    name: name,
-                    joinYear: joinYear,
-                    department: selectedDept
+                    variables: {
+                      id: editedId,
+                      name: name,
+                      joinYear: joinYear,
+                      department: selectedDept
+                    }
                   });
                   setEditedId('');
                   setName('');

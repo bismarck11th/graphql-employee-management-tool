@@ -92,3 +92,13 @@ export const UPDATE_EMPLOYEE = gql`
     }
   }
 `;
+
+export const DELETE_EMPLOYEE = gql`
+  mutation ($id: ID!) {
+    deleteEmployee(input: { id: $id }) {
+      employee {
+        id
+      }
+    }
+  }
+`;
