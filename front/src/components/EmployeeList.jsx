@@ -3,11 +3,12 @@ import { useMutation } from '@apollo/client';
 // MUI
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 // Context
 import { StateContext } from '../context/StateContext';
 // Query
 import { DELETE_EMPLOYEE, GET_EMPLOYEES } from '../queries';
-// CSS
+// CSSP
 import styles from './EmployeeList.module.css';
 
 const EmployeeList = ({ dataEmployees }) => {
@@ -51,6 +52,13 @@ const EmployeeList = ({ dataEmployees }) => {
                     } catch (err) {
                       alert(err.message);
                     }
+                    if (employee.node.id === dataSingleEmployee?.employee.id) {
+                      await getSingleEmployee({
+                        variables: {
+                          id: employee.node.id
+                        }
+                      });
+                    }
                   }}
                 />
                 <EditIcon
@@ -61,6 +69,20 @@ const EmployeeList = ({ dataEmployees }) => {
                       setName(employee.node.name);
                       setJoinYear(employee.node.joinYear);
                       setSelectedDept(employee.node.department.id);
+                    } catch (err) {
+                      alert(err.message);
+                    }
+                  }}
+                />
+                <DragIndicatorIcon
+                  className={styles.employeeList__edit}
+                  onClick={async () => {
+                    try {
+                      await getSingleEmployee({
+                        variables: {
+                          id: employee.node.id
+                        }
+                      });
                     } catch (err) {
                       alert(err.message);
                     }

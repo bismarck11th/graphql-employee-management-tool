@@ -21,6 +21,20 @@ export const GET_TOKEN = gql`
 `;
 
 // MainPage
+export const GET_SINGLE_EMPLOYEE = gql`
+  query ($id: ID!) {
+    employee(id: $id) {
+      id
+      name
+      joinYear
+      department {
+        id
+        deptName
+      }
+    }
+  }
+`;
+
 export const GET_EMPLOYEES = gql`
   query {
     allEmployees {

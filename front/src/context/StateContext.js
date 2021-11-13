@@ -1,4 +1,6 @@
 import React, { createContext, useState } from 'react';
+import { useLazyQuery } from '@apollo/client';
+import { GET_SINGLE_EMPLOYEE } from '../queries';
 
 export const StateContext = createContext();
 
@@ -8,6 +10,13 @@ const StateContextProvider = (props) => {
   const [deptName, setDeptName] = useState('');
   const [selectedDept, setSelectedDept] = useState('');
   const [editedId, setEditedId] = useState('');
+  const [
+    getSingleEmployee,
+    { data: dataSingleEmployee, error: errorSingleEmployee }
+  ] = useLazyQuery(GET_SINGLE_EMPLOYEE, {
+    // cacheを使わない
+    fetchPolicy: 'network-only'
+  });
 
   return (
     <StateContext.Provider
@@ -21,7 +30,10 @@ const StateContextProvider = (props) => {
         selectedDept,
         setSelectedDept,
         editedId,
-        setEditedId
+        setEditedId,
+        dataSingleEmployee,
+        errorSingleEmployee,
+        getSingleEmployee
       }}
     >
       {props.children}
