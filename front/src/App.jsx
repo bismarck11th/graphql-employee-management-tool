@@ -6,7 +6,7 @@ import { Auth, MainPage } from './components';
 import styles from './App.module.css';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:8000/graphql',
+  uri: 'http://127.0.0.1:8000/graphql/',
   headers: {
     authorization: localStorage.getItem('token')
       ? `JWT ${localStorage.getItem('token')}`
@@ -15,7 +15,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-function App() {
+const App = () => {
   return (
     <ApolloProvider client={client}>
       <div className={styles.app}>
@@ -29,5 +29,4 @@ function App() {
     </ApolloProvider>
   );
 }
-
 export default App;
