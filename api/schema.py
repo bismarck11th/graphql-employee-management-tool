@@ -4,13 +4,24 @@ from graphql_relay import from_global_id
 from graphene_django.types import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from graphql_jwt.decorators import login_required
-from .models import Department, Employee
+from .models import Employee, Department
+
+
+class EmployeeNode(DjangoObjectType):
+    class Meta:
+        model = Employee
+        filter_fields = {
+            "name": ["exact", "icontains"],
+            "join_year": ["exact", "icontains"],
+            "department__dept_name": ["icontains"],
+        }
+        interfaces = (relay.Node,)
 
 
 class DepartmentNode(DjangoObjectType):
     class Meta:
         model = Department
-        django_filters = {"employees": ["exact"], "dept_name": ["exact"]}
+        filter_fields = {"employees": ["exact"], "dept_name": ["exact"]}
         interfaces = (relay.Node,)
 
 
@@ -18,7 +29,7 @@ class DeptCreateMutation(relay.ClientIDMutation):
     class Input:
         dept_name = graphene.String(required=True)
 
-    department = graphene.Field(Department)
+    department = graphene.Field(DepartmentNode)
 
     @login_required
     def mutate_and_get_payload(root, info, **input):
@@ -35,7 +46,7 @@ class DeptDeleteMutation(relay.ClientIDMutation):
     class Input:
         id = graphene.ID(required=True)
 
-    department = graphene.Field(Department)
+    department = graphene.Field(DepartmentNode)
 
     @login_required
     def mutate_and_get_payload(root, info, **input):
@@ -46,35 +57,24 @@ class DeptDeleteMutation(relay.ClientIDMutation):
         return DeptDeleteMutation(department=None)
 
 
-class EmployeeNode(DjangoObjectType):
-    class Meta:
-        node = Employee
-        filter_fields = {
-            "name": ["exact", "icontains"],
-            "join_year": ["exact", "icontains"],
-            "department_name": ["icontains"],
-        }
-        interfaces = (relay.Node,)
-
-
 class EmployeeCreateMutation(relay.ClientIDMutation):
     class Input:
         name = graphene.String(required=True)
         join_year = graphene.Int(required=True)
-        name = graphene.ID(required=True)
+        department = graphene.ID(required=True)
 
-        employee = graphene.Field(EmployeeNode)
+    employee = graphene.Field(EmployeeNode)
 
-        @login_required
-        def mutate_and_get_payload(root, info, **kwargs):
-            employee = Employee(
-                name=input.get("name"),
-                join_year=input.get("join_year"),
-                department_id=from_global_id(input.get("department_id"))[1],
-            )
-            employee.save()
+    @login_required
+    def mutate_and_get_payload(root, info, **input):
+        employee = Employee(
+            name=input.get("name"),
+            join_year=input.get("join_year"),
+            department_id=from_global_id(input.get("department"))[1],
+        )
+        employee.save()
 
-            return EmployeeCreateMutation(employee=employee)
+        return EmployeeCreateMutation(employee=employee)
 
 
 class EmployeeUpdateMutation(relay.ClientIDMutation):
@@ -84,33 +84,34 @@ class EmployeeUpdateMutation(relay.ClientIDMutation):
         join_year = graphene.Int(required=True)
         department = graphene.ID(required=True)
 
-        employee = graphene.Field(EmployeeNode)
+    employee = graphene.Field(EmployeeNode)
 
-        @login_required
-        def mutate_and_get_payload(root, info, **kwargs):
-            employee = Employee(id=from_global_id(input.get("id"))[1])
-            employee.name = input.get("name")
-            employee.join_year = input.get("join_year")
-            employee.department_id = from_global_id(input.get("department_id"))[1]
+    @login_required
+    def mutate_and_get_payload(root, info, **input):
 
-            employee.save()
+        employee = Employee(id=from_global_id(input.get("id"))[1])
+        employee.name = input.get("name")
+        employee.join_year = input.get("join_year")
+        employee.department_id = from_global_id(input.get("department"))[1]
 
-            return EmployeeUpdateMutation(employee=employee)
+        employee.save()
+
+        return EmployeeUpdateMutation(employee=employee)
 
 
 class EmployeeDeleteMutation(relay.ClientIDMutation):
     class Input:
         id = graphene.ID(required=True)
 
-        employee = graphene.Field(EmployeeNode)
+    employee = graphene.Field(EmployeeNode)
 
-        @login_required
-        def mutate_and_get_payload(root, info, **kwargs):
-            employee = Employee(id=from_global_id(input.get("id"))[1])
+    @login_required
+    def mutate_and_get_payload(root, info, **input):
 
-            employee.delete()
+        employee = Employee(id=from_global_id(input.get("id"))[1])
+        employee.delete()
 
-            return EmployeeDeleteMutation(employee=None)
+        return EmployeeDeleteMutation(employee=None)
 
 
 class Mutation(graphene.AbstractType):
@@ -123,7 +124,7 @@ class Mutation(graphene.AbstractType):
 
 class Query(graphene.ObjectType):
     employee = graphene.Field(EmployeeNode, id=graphene.NonNull(graphene.ID))
-    all_employee = DjangoFilterConnectionField(EmployeeNode)
+    all_employees = DjangoFilterConnectionField(EmployeeNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
 
     @login_required

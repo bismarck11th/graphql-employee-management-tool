@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model
 import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
@@ -13,7 +13,7 @@ class UserNode(DjangoObjectType):
         filter_fields = {
             "username": ["exact", "icontains"],
         }
-        interface = (relay.Node,)
+        interfaces = (relay.Node,)
 
 
 class CreateUserMutation(relay.ClientIDMutation):
