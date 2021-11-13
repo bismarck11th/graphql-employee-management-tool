@@ -8,7 +8,7 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import { StateContext } from '../context/StateContext';
 // Query
 import { DELETE_EMPLOYEE, GET_EMPLOYEES } from '../queries';
-// CSSP
+// CSS
 import styles from './EmployeeList.module.css';
 
 const EmployeeList = ({ dataEmployees }) => {
