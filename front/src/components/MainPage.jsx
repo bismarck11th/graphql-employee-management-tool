@@ -7,7 +7,15 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 // Query
 import { GET_EMPLOYEES, GET_DEPTS } from '../queries';
 // Components
-import { EmployeeCreate, EmployeeList, EmployeeDetails, DeptList } from './';
+import {
+  DeptList,
+  EmployeeCreate,
+  EmployeeDetails,
+  EmployeeList,
+  FilterByAnd,
+  FilterByName,
+  Pagination
+} from './';
 // CSS
 import styles from './MainPage.module.css';
 
@@ -66,6 +74,17 @@ const MainPage = () => {
         </Grid>
         <Grid item xs={3}>
           <DeptList dataDepts={dataDepts} />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={2}>
+          <FilterByName />
+        </Grid>
+        <Grid item xs={3}>
+          <FilterByAnd />
+        </Grid>
+        <Grid item xs={7}>
+          <Pagination />
         </Grid>
       </Grid>
     </div>

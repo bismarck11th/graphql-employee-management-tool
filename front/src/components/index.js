@@ -3,4 +3,7 @@ export { default as DeptList } from './DeptList';
 export { default as EmployeeCreate } from './EmployeeCreate';
 export { default as EmployeeDetails } from './EmployeeDetails';
 export { default as EmployeeList } from './EmployeeList';
+export { default as FilterByAnd } from './FilterByAnd';
+export { default as FilterByName } from './FilterByName';
 export { default as MainPage } from './MainPage';
+export { default as Pagination } from './Pagination';
